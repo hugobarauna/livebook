@@ -20,7 +20,11 @@ defmodule Livebook.MixProject do
       escript: escript(),
       package: package(),
       default_release: :livebook,
-      releases: releases()
+      releases: releases(),
+
+      # Docs
+      homepage_url: "https://livebook.dev",
+      docs: docs()
     ]
   end
 
@@ -109,6 +113,7 @@ defmodule Livebook.MixProject do
       {:phoenix_live_reload, "~> 1.2", only: :dev},
       {:floki, ">= 0.27.0", only: :test},
       {:bypass, "~> 2.1", only: :test},
+      {:ex_doc, "~> 0.30", only: :dev, runtime: false},
       # ZTA deps
       {:jose, "~> 1.11.5"},
       {:req, "~> 0.3.8"},
@@ -177,5 +182,59 @@ defmodule Livebook.MixProject do
     |> Standalone.copy_elixir(elixir_version)
     |> Standalone.copy_hex()
     |> Standalone.copy_rebar3(rebar3_version)
+  end
+
+  defp docs() do
+    [
+      logo: "static/images/logo.png",
+      main: "what_is_livebook",
+      api_reference: false,
+      extra_section: "Docs",
+      extras: extras(),
+      groups_for_extras: [
+        "Getting started": Path.wildcard("docs/getting_started/*"),
+        Tutorials: Path.wildcard("docs/tutorials/*"),
+        "How to guides": Path.wildcard("docs/how_to/*"),
+        "Built-in Smart cells": Path.wildcard("docs/smart_cells/*"),
+        Features: Path.wildcard("docs/features/*"),
+        "Core concepts": Path.wildcard("docs/core_concepts/*"),
+        "Extend Livebook": Path.wildcard("docs/extend_livebook/*")
+      ]
+    ]
+  end
+
+  defp extras() do
+    [
+      "docs/getting_started/what_is_livebook.md",
+      "docs/getting_started/installation.md",
+      "docs/getting_started/intro_to_livebook.livemd",
+      "docs/tutorials/intro_elixir.livemd",
+      "docs/tutorials/build_livebook_app.livemd",
+      "docs/tutorials/intro_to_vega_lite.livemd",
+      "docs/tutorials/intro_to_maplibre.livemd",
+      "docs/tutorials/remote_introspection.livemd",
+      "docs/tutorials/documentation.md",
+      "docs/how_to/google_big_query.md",
+      "docs/how_to/amazon_athena.md",
+      "docs/how_to/computation_background.md",
+      "docs/how_to/debug_live_system.md",
+      "docs/how_to/communicate_with_cluster.md",
+      "docs/smart_cells/chart.md",
+      "docs/smart_cells/map.md",
+      "docs/smart_cells/database_connection.md",
+      "docs/smart_cells/sql.md",
+      "docs/smart_cells/data_transform.md",
+      "docs/smart_cells/neural_network.md",
+      "docs/smart_cells/slack_message.md",
+      "docs/features/elixir_integration.livemd",
+      "docs/features/secrets.md",
+      "docs/features/diagrams.livemd",
+      "docs/features/math_expressions.livemd",
+      "docs/extend_livebook/build_custom_kino.livemd",
+      "docs/extend_livebook/build_smart_cell.livemd",
+      "docs/core_concepts/livebook_app.md",
+      "docs/core_concepts/kino.md",
+      "docs/core_concepts/smart_cell.md"
+    ]
   end
 end

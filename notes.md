@@ -24,7 +24,29 @@
 - `lib/livebook_app.ex` - App-specific logic
 - `lib/livebook_web.ex` - Web interface module
 
+## LiveView Structure
+The application has a rich set of LiveViews including:
+- `home_live.ex` - Main home page
+- `session_live.ex` - Core notebook session interface (68KB file!)
+- `apps_live.ex` - Apps management
+- `app_live.ex` - Individual app interface
+- `settings_live.ex` - Settings management
+- `learn_live.ex` - Learning/tutorial section
+- `open_live.ex` - File opening interface
+
+## Router Structure
+- Uses Phoenix LiveDashboard
+- Has authentication pipelines (`:auth`, `:browser`)
+- Complex routing with multiple live_sessions
+- Supports both authenticated and public routes
+
+## Dependencies Status
+- Successfully fetching dependencies
+- Project appears to compile cleanly
+- Ready for development/exploration
+
 ## Next Steps
 - Explore the web interface structure
 - Check current routing and LiveViews
 - Identify areas for potential enhancement or bug fixes
+

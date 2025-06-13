@@ -24,8 +24,9 @@ defmodule Livebook.Logger.JsonFormatter do
     %{
       timestamp: format_timestamp(timestamp),
       level: level,
-      message: IO.iodata_to_binary_metadata(metadata)
+      message: IO.iodata_to_binary(message)
     }
+    |> Map.merge(format_metadata(metadata))
     |> JSON.encode!()
     |> Kernel.<>("\n")
   end

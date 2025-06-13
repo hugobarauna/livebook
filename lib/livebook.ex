@@ -102,7 +102,18 @@ defmodule Livebook do
     end
 
     if metadata = Livebook.Config.log_metadata!("LIVEBOOK_LOG_METADATA") do
-      config :logger, :console, metadata: metadata
+      config :logger,end
+
+    if format = Livebook.Config.log_format!("LIVEBOOK_LOG_FORMAT") do
+      case format do
+        :json ->
+          config :logger, :console,
+            format: {Livebook.Logger.JsonFormatter, :format}
+
+        :console ->
+          # Keep the default console format from config/config.exs
+          :ok
+      end
     end
 
     if port = Livebook.Config.port!("LIVEBOOK_PORT") do
@@ -280,3 +291,4 @@ defmodule Livebook do
     Livebook.Notebook.Export.Elixir.notebook_to_elixir(notebook)
   end
 end
+

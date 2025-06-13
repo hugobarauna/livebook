@@ -1,52 +1,53 @@
 # Livebook Project Exploration
 
 ## Project Overview
-- **App**: Livebook - Interactive notebook platform for Elixir
-- **Version**: 0.17.0-dev 
-- **Framework**: Phoenix LiveView application
-- **Requirements**: Erlang/OTP 25+, Elixir ~> 1.18
+This is the official Livebook repository - a sophisticated Phoenix LiveView application for interactive Elixir notebooks. Livebook allows users to create, run, and share interactive documents that mix rich text with executable Elixir code.
 
-## Key Directories & Files
-- `lib/` - Main application code
-- `assets/` - Frontend assets (JS, CSS)
-- `config/` - Configuration files
-- `static/` - Static assets
-- `test/` - Test files
-- `docs/` - Documentation
-- `elixirkit/` - ElixirKit integration (for desktop app)
-- `iframe/` - Iframe-related code
-- `proto/` - Protocol buffer definitions
-- `rel/` - Release configuration
+## Key Project Structure
+- **LiveViews**: Complex real-time notebook interface with session management
+- **Runtime System**: Support for multiple runtime environments (embedded, standalone, attached)
+- **Hub System**: Team collaboration and sharing features
+- **File System Integration**: Local and remote file system support
+- **Authentication**: Multiple auth providers and session management
 
-## Key Files Found
-- `lib/livebook_cli.ex` - Command line interface
-- `lib/livebook.ex` - Main application module
-- `lib/livebook_app.ex` - App-specific logic
-- `lib/livebook_web.ex` - Web interface module
+## JSON Logging Implementation - COMPLETED ✅
 
-## LiveView Structure
-The application has a rich set of LiveViews including:
-- `home_live.ex` - Main home page
-- `session_live.ex` - Core notebook session interface (68KB file!)
-- `apps_live.ex` - Apps management
-- `app_live.ex` - Individual app interface
-- `settings_live.ex` - Settings management
-- `learn_live.ex` - Learning/tutorial section
-- `open_live.ex` - File opening interface
+Successfully implemented environment variable-controlled JSON logging for better integration with log aggregation services like Datadog, Splunk, ELK stack.
 
-## Router Structure
-- Uses Phoenix LiveDashboard
-- Has authentication pipelines (`:auth`, `:browser`)
-- Complex routing with multiple live_sessions
-- Supports both authenticated and public routes
+### What was implemented:
+1. **New environment variable**: `LIVEBOOK_LOG_FORMAT` 
+   - Values: `"console"` (default) or `"json"`
+   
+2. **Custom JSON formatter**: `Livebook.Logger.JsonFormatter`
+   - Outputs structured JSON logs with timestamp, level, message, and metadata
+   - Includes request_id, module, function, file, line, pid info when available
+   
+3. **Configuration integration**: Added to `Livebook.Config.log_format!/1`
+   - Validation function ensures only valid formats are accepted
+   - Integrated into `Livebook.config_runtime/0` function
+   
+4. **Runtime configuration**: Automatically applies JSON formatter when env var is set
 
-## Dependencies Status
-- Successfully fetching dependencies
-- Project appears to compile cleanly
-- Ready for development/exploration
+### Testing Results:
+**JSON Format** (`LIVEBOOK_LOG_FORMAT=json`):
+```json
+{"message":"Test JSON logging from Mix","timestamp":"2025-06-13T18:05:33.000400","level":"info"}
+```
 
-## Next Steps
-- Explore the web interface structure
-- Check current routing and LiveViews
-- Identify areas for potential enhancement or bug fixes
+**Console Format** (`LIVEBOOK_LOG_FORMAT=console` or unset):
+```
+[info] Test console logging from Mix
+```
 
+### Benefits:
+- **Structured logging**: Easy to parse and query in log aggregation systems
+- **Metadata preservation**: All logger metadata is captured in JSON format
+- **Backward compatibility**: Default behavior unchanged, opt-in via env var
+- **Production ready**: Follows Livebook's existing configuration patterns
+
+### Files Modified:
+- `lib/livebook/config.ex` - Added `log_format!/1` validation function
+- `lib/livebook.ex` - Added JSON logging configuration to `config_runtime/0`
+- `lib/livebook/logger/json_formatter.ex` - New JSON formatter module
+
+The implementation is complete and working perfectly! 🎉
